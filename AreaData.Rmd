@@ -1,0 +1,91 @@
+---
+title: "R Notebook"
+output: html_notebook
+
+```{r}
+# import/select packages
+library(picante)
+library(vegan)
+library(plyr)
+library(labdsv)
+
+library(rgbif) # part of r open science suite; species occurence data
+library(spocc)
+library(taxize)
+
+library(ape)
+library(brranching)
+
+
+# read in files 
+FullCentralPark = read.csv("FullCentralPark.csv") 
+TreeCheck = read.csv("TreeCheck.csv")
+
+# get species list (occurance data) from each
+full.occ = FullCentralPark$DarScientificName
+check.occ = TreeCheck$scientificName
+
+# check for accepted species names using taxise 
+# do for each list
+# so that species names are standardized between the two lists and like samples match up
+for (i in full.occ)
+{
+  name = full.occ[i]
+  tsn = get_tsn(name, accepted=FALSE) # find tsn
+
+  acceptedName = lapply(tsn, itis_acceptname) # look up accepted name 
+  full.occ[i] = acceptedName # apply to list (incase not the same) 
+}
+
+for (i in check.occ)
+{
+  name = full.occ[i]
+  tsn=get_tsn(name, accepted=FALSE) # find tsn
+  
+  lapply(tsn, itis_acceptname) # apply accepted name (incase not the same)
+  check.occ[i] = acceptedName # apply to list (incase not the same) 
+
+}
+
+# cut down central park plant list so that only trees exist (compare to list of known central park trees)
+
+
+
+for (i in full.occ)
+{ 
+  for (j in check.occ)
+  {
+    # compare i (from full list) to j (from check list) to see if they match - if they do keep, if not, keep cycling 
+    if (j == i)
+    {
+      break
+    }
+  }
+  
+  # if we reach the end of the list, and theres no match then delete the data point 
+}
+
+# format wanted (cut) data into abbunance matix
+
+
+
+
+```
+
+
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
