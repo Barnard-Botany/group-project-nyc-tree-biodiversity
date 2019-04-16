@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(ape)
+library("devtools")
+#devtools::install_github("ropensci/brranching")
+library("ape")
+library("brranching")
+```
+
+
+```{r}
+taxa<-c( "Acer rubrum","Quercus robur","Fagus grandifolia","Morus rubra","Fraxinus excelsior", "Ulmus americana", "Carpinus betulus", "Quercus rubra", "Ilex opaca", "Magnolia x soulangiana", "Larix decidua", "Carpinus caroliniana", "Quercus acutissima", "Tilia x europaea", "Larix laricina", "Quercus coccinea", "Quercus cerris","Tilia americana","Acer platanoides", "Ginkgo biloba", "Platanus occidentalis","Pinus sylvestris", "Fraxinus pennsylvanica", "Cladastris kentuckea", "Amelanchier canadensis", "Eucommia ulmoides", "Phellodendron amurense", "Carya ovata", "Crataegus", "Cedrus atlantica", "Crataefus hawthorn", "Oxydendron arboreum", "Acer campestre", "Pinus nigra", "Magnolia grandiflora", "Pinus wallichiana", "Prunus serotina", "Magnolia stellata", "Gleditsia triacanthos", "Robinia pseudoacacia", "Liquidambar styraciflua", "Aesculus hippocastanum", "Quercus velutina", "Acer pseudoplatanus", "Stewartia pseudocamellia", "Nyssa sylvatica", "Liriodendron tulipifera", "Syringa reticulata", "Juglans nigra", "Corylus colurna", "Zelkova serrata", "Cedrus libani", "Prunus subhirtella", "Circidiphyllum japonicum", "Chionanthus retusus", "Fraxinus americana", "Cornus kousa", "Picea pungens", "Morus alba", "Pinus flexilis", "Taxodium distichum", "Quercus phellos", "Celtis occidentalis", "Acer platanoides", "Cornus mas", "Ulmus glabra", "Quercus rubra", "Picea abies","Malus floribunda", "Ulmus procera", "Fagus sylvatica", "Maclura pomifera", "Lagerstroemia indica", "Prunus serrulata", "Parrotia persica", "Metasequoia glyptostroboides","Acer saccharum", "Quercus palustris", "Cercis canadensis","Acer rubrum","Pinus strobus") 
+
+
+CP_phylomatic <- phylomatic(taxa = taxa, storedtree ="R20120829", get = 'POST')
+plot(CP_phylomatic, no.margin = TRUE) 
+
+
+newick_fn = "CP_phylomatic"
+write.tree(CP_phylomatic, file=newick_fn)
+
+
+```
+
+
