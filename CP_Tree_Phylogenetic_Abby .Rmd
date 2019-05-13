@@ -1,0 +1,84 @@
+---
+Author: Abigail Gutierrez
+title: "CP Tree Phylogenetic"
+output: html_notebook
+---
+```{r}
+library(ape)
+library("devtools")
+#devtools::install_github("ropensci/brranching")
+library("ape")
+library("brranching")
+```
+
+
+```{r}
+taxa<-c( "Acer rubrum","Quercus robur","Fagus grandifolia","Morus rubra","Fraxinus excelsior", "Ulmus americana", "Carpinus betulus", "Quercus rubra", "Ilex opaca", "Magnolia x soulangiana", "Larix decidua", "Carpinus caroliniana", "Quercus acutissima", "Tilia x europaea", "Larix laricina", "Quercus coccinea", "Quercus cerris","Tilia americana","Acer platanoides", "Ginkgo biloba", "Platanus occidentalis","Pinus sylvestris", "Fraxinus pennsylvanica", "Cladastris kentuckea", "Amelanchier canadensis", "Eucommia ulmoides", "Phellodendron amurense", "Carya ovata", "Crataegus", "Cedrus atlantica", "Crataefus hawthorn", "Oxydendron arboreum", "Acer campestre", "Pinus nigra", "Magnolia grandiflora", "Pinus wallichiana", "Prunus serotina", "Magnolia stellata", "Gleditsia triacanthos", "Robinia pseudoacacia", "Liquidambar styraciflua", "Aesculus hippocastanum", "Quercus velutina", "Acer pseudoplatanus", "Stewartia pseudocamellia", "Nyssa sylvatica", "Liriodendron tulipifera", "Syringa reticulata", "Juglans nigra", "Corylus colurna", "Zelkova serrata", "Cedrus libani", "Prunus subhirtella", "Circidiphyllum japonicum", "Chionanthus retusus", "Fraxinus americana", "Cornus kousa", "Picea pungens", "Morus alba", "Pinus flexilis", "Taxodium distichum", "Quercus phellos", "Celtis occidentalis", "Acer platanoides", "Cornus mas", "Ulmus glabra", "Quercus rubra", "Picea abies","Malus floribunda", "Ulmus procera", "Fagus sylvatica", "Maclura pomifera", "Lagerstroemia indica", "Prunus serrulata", "Parrotia persica", "Metasequoia glyptostroboides","Acer saccharum", "Quercus palustris", "Cercis canadensis","Acer rubrum","Pinus strobus") 
+
+
+CP_phylomatic <- phylomatic(taxa = taxa, storedtree ="R20120829", get = 'POST')
+plot(CP_phylomatic, no.margin = TRUE) 
+View(CP_phylomatic)
+
+newick_fn = "CP_phylomatic"
+write.tree(CP_phylomatic, file=newick_fn)
+
+plot(CP_phylomatic, type="phylogram") 
+plot(CP_phylomatic, type="cladogram") 
+layout(matrix(1:4, 2, 2))
+plot(CP_phylomatic, type="unrooted", edge.width=5) 
+
+plot(CP_phylomatic, type="fan")
+plot(CP_phylomatic, type="unrooted")
+plot(CP_phylomatic, type="radial") 
+
+
+pdf_fn = "CP_phylomatic.pdf"
+pdf(file=pdf_fn) 
+
+cmdstr = paste("open ", pdf_fn, sep="")
+system(cmdstr)
+
+
+
+```
+
+In order for our project to collect data from GBIF we had to have Professor Callihan Help us create a polygon in R 
+```{r}
+#NOT LIKELY TO BE USEFUL FOR OUR CLASS BECAUSE WE ARE NO DOING TRUE GIS 
+#Central Park is 143
+nyc_tracts <- tracts(state = '36', county = c('061','047','081','005','085'))
+summary(nyc_tracts) 
+
+
+key <- name_backbone(name=c('Acer platanoides'))$genusKey
+key
+occ_search(taxonKey=key, limit=50) 
+
+#Other useful name-related functions in gbif:
+#name_lookup(q="Quercus")
+name_backbone(name="Quercus")
+#name_backbone(name="Quercus rubra")
+#name_usage(2877951)
+
+
+
+### Getting usageKeys from GBIF (which are the equivalent of TSN from Catalog of Life)
+### This is recyclable, postentially loop-able
+OurKey <- name_backbone(name='Quercus', kingdom = 'plants')$usageKey
+OurKey
+### Now asking for occurrence data for this Key, which is the genus Quercus which is oak trees
+occ_data(taxonKey = OurKey, geometry='POLYGON((-73.958124 40.800521, -73.949192 40.796849, -73.973083 40.76422, -73.981589 40.768175, -73.958124 40.800521))') 
+
+###This is just extra code
+### Defining a polygon in WKT which stands for Well Known Text -- it knows these are lat & long
+CP=readWKT("POLYGON((-73.958124 40.800521, -73.949192 40.796849, -73.973083 40.76422, -73.981589 40.768175, -73.958124 40.800521))")
+CP 
+
+
+
+``` 
+```
+
+
+
